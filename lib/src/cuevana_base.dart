@@ -187,11 +187,11 @@ class CuevanaClient {
     for (var movie in movies) {
       result.add(MovieBrief(
         id: (movie['url']['slug'] as String).split('/').sublist(1).join('/'),
-        title: movie['titles']['name'],
+        title: movie['titles']['name'] ?? '',
         rate: double.parse(movie['rate']['average'].toString()),
-        poster: movie['images']['poster'],
-        banner: movie['images']['backdrop'],
-        overview: movie['overview'],
+        poster: movie['images']['poster'] ?? '',
+        banner: movie['images']['backdrop'] ?? '',
+        overview: movie['overview'] ?? '',
         idTMDb: movie['TMDbId'],
         genres: movie['genres']
             .map<Genre>((e) => Genre(e['id'], e['name']))
@@ -356,7 +356,7 @@ class CuevanaClient {
     return Serie(
       id: id,
       title: serie['titles']['name'],
-      rate: double.parse(serie['rate']['average'].toString())/2,
+      rate: double.parse(serie['rate']['average'].toString()) / 2,
       poster: serie['images']['poster'],
       banner: serie['images']['backdrop'],
       overview: serie['overview'],
@@ -367,7 +367,8 @@ class CuevanaClient {
           .map<CastActor>((e) => CastActor(e['id'], e['name']))
           .toList(),
       releaseDate: DateTime.parse(serie['releaseDate']),
-      seasons: (serie['seasons'] as List).where((e) => e['episodes'].length > 0)
+      seasons: (serie['seasons'] as List)
+          .where((e) => e['episodes'].length > 0)
           .map<Season>((e) => Season(
               number: e['number'],
               episodes: e['episodes'].map<EpisodeBrief>((e) {
